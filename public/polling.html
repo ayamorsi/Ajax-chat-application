@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <form id="form">
+        <input id="name" type="text" name="name">
+        <input id="content" type="text" name="content">
+        <button type="submit">Send</button>
+    </form>
+<div id="messages" style="color: black;" ></div>
+</body>
+<script>
+    const form = document.getElementById('form');
+    const input = document.getElementById('content');
+    const names = document.getElementById('name');
+    const messages = document.getElementById('messages');
+     
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = input.value;
+        const name = names.value;
+        axios.post('http://localhost:4000/messages', { name, message }).then(res => input.value = '', names.value = '');
+  });
+        const evtSource = new EventSource('http://localhost:4000/messages')
+        evtSource.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        messages.innerHTML = messages.innerHTML  + data.name + " : " + data.message + "<br>"
+        }
+        </script>
+</html>
