@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
+</head>
+<body>
+    <form id="form">
+        <input id="name" type="text" name="name">
+        <input id="content" type="text" name="content">
+        <button type="submit">Send</button>
+    </form>
+<div id="messages" style="color: black;" ></div>
+</body>
+<script>
+    const socket = io.connect('http://localhost:4000')
+    const form = document.getElementById('form');
+    const input = document.getElementById('content');
+    const names = document.getElementById('name');
+    const messages = document.getElementById('messages');
+     
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const message = input.value;
+        const name = names.value;
+        socket.emit('messages', {name :input.value , message :names.value })
+  });
+  socket.on('new-message' ,(data)=>{
+        messages.innerHTML = messages.innerHTML  + data.name + " : " + data.message + "<br>"
+  })
+        </script>
+</html>
